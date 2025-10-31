@@ -422,7 +422,7 @@
         function updateAssigneeSelect() { 
             // À IMPLÉMENTER
             const storyAssignee = document.getElementById("storyAssignee");
-            let selectInnerHtml = "";
+            let selectInnerHtml = `<option value="" hidden selected>Non assigné</option>`;
             collaborators.forEach(collab => {
                 selectInnerHtml+= `<option value="${collab}">${collab}</option><br>`
             });
@@ -449,10 +449,10 @@
             if(storyTitle && storyDescription){
                 const story = {
                     id:storyIdCounter++,
-                    title:storyTitle,
-                    description:storyDescription,
-                    sprint:parseInt(storySprint),
-                    assignee:storyAssignee,
+                    title:storyTitle.value,
+                    description:storyDescription.value,
+                    sprint:parseInt(storySprint.value),
+                    assignee:storyAssignee.value,
                     status:"backlog"
                 }
                 userStories.push(story);
