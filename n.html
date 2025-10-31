@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCRUM Board</title>
+    <title>YouCode SCRUM Board</title>
     <style>
         * {
             margin: 0;
@@ -306,7 +306,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1 >🚀 SCRUM Board</h1>
+            <h1>SCRUM Board</h1>
             <p>Gérez vos projets avec agilité</p>
         </div>
 
@@ -376,198 +376,144 @@
         let boardStories = [];
         let storyIdCounter = 1;
 
-        /**
-         * Fonction pour ajouter un nouveau collaborateur à l'équipe
-         * TODO: 
-         * - Récupérer la valeur du champ input avec l'id 'collaboratorName'
-         * - Vérifier que le nom n'est pas vide et n'existe pas déjà dans le tableau 'collaborators'
-         * - Ajouter le collaborateur au tableau 'collaborators'
-         * - Vider le champ input
-         * - Appeler updateCollaboratorsList() pour afficher la liste
-         * - Appeler updateAssigneeSelect() pour mettre à jour le select d'assignation
-         */
         function addCollaborator() {
-            // À IMPLÉMENTER
-            const input = document.getElementById("collaboratorName");
-            if(input.value && !collaborators.includes(input.value)) collaborators.push(input.value);
-            input.value = "";
-            updateCollaboratorsList();
-            updateAssigneeSelect()
-        }
-
-        /**
-         * Fonction pour afficher la liste des collaborateurs dans l'interface
-         * TODO:
-         * - Récupérer l'élément DOM avec l'id 'collaboratorsList'
-         * - Générer du HTML pour chaque collaborateur (badges avec leur nom)
-         * - Utiliser un style inline: background #667eea, color white, padding 8px 15px, border-radius 20px
-         * - Injecter le HTML dans l'élément avec innerHTML
-         */
-        function updateCollaboratorsList() {
-            // À IMPLÉMENTER
-            let i = 0;
-            let collaboratorsList = document.getElementById("collaboratorsList");
-            let span = `<span style="background: #667eea; color: white; padding: 8px 15px; border-radius: 20px;">${collaborators[i]}</span>`;
-            collaboratorsList.innerHTML += span;  
-            i++;
-        }
-
-        /**
-         * Fonction pour mettre à jour la liste déroulante des assignés
-         * TODO:
-         * - Récupérer l'élément select avec l'id 'storyAssignee'
-         * - Générer les options: une option "Non assigné" + une option par collaborateur
-         * - Mettre à jour le select avec innerHTML
-         */
-        function updateAssigneeSelect() { 
-            // À IMPLÉMENTER
-            const storyAssignee = document.getElementById("storyAssignee");
-            const selectInnerHtml = "";
-            collaborators.forEach(collab => {
-                selectInnerHtml+= `<option value="${collab}">${collab}</option><br>`
-            });
-        }
-
-        /**
-         * Fonction pour créer une nouvelle User Story
-         * TODO:
-         * - Récupérer les valeurs des champs: storyTitle, storyDescription, storySprint, storyAssignee
-         * - Vérifier que le titre et la description ne sont pas vides
-         * - Créer un objet story avec: id (utiliser storyIdCounter++), title, description, sprint (parseInt), assignee, status: 'backlog'
-         * - Ajouter la story au tableau 'userStories'
-         * - Vider les champs titre et description
-         * - Appeler renderSprintBacklog() pour actualiser l'affichage
-         */
-        function addUserStory() {
-            // À IMPLÉMENTER
-            const storyTitle = document.getElementById("storyTitle");
-            const storyDescription = document.getElementById("storyDescription");
-            const storySprint = document.getElementById("storySprint");
-            const storyAssignee = document.getElementById("storyAssignee");
-
-            if(storyTitle && storyDescription){
-                const story = {
-                    id:storyIdCounter++,
-                    title:storyTitle,
-                    description:storyDescription,
-                    sprint:parseInt(startSprint),
-                    assignee:storyAssignee,
-                    status:"backlog"
-                }
-                userStories.push(story);
+            const name = document.getElementById('collaboratorName').value.trim();
+            if (name && !collaborators.includes(name)) {
+                collaborators.push(name);
+                document.getElementById('collaboratorName').value = '';
+                updateCollaboratorsList();
+                updateAssigneeSelect();
             }
-            storyTitle.value = "";
-            storyDescription.value = "";
-            renderSprintBacklog();
         }
 
-        /**
-         * Fonction pour afficher le Sprint Backlog avec toutes les stories par sprint
-         * TODO:
-         * - Récupérer le conteneur avec l'id 'sprintBacklog'
-         * - Pour chaque sprint (1, 2, 3):
-         *   - Filtrer les stories du sprint avec status 'backlog'
-         *   - Générer le HTML: conteneur sprint avec header (titre + bouton Start)
-         *   - Pour chaque story: afficher titre, description, assigné
-         *   - Si aucune story: afficher "Aucune story dans ce sprint"
-         * - Injecter tout le HTML généré dans le conteneur
-         */
+        function updateCollaboratorsList() {
+            const list = document.getElementById('collaboratorsList');
+            list.innerHTML = '<div style="margin-top: 15px;">' + 
+                collaborators.map(c => `<span style="display: inline-block; background: #667eea; color: white; padding: 8px 15px; border-radius: 20px; margin: 5px;">${c}</span>`).join('') +
+                '</div>';
+        }
+
+        function updateAssigneeSelect() {
+            const select = document.getElementById('storyAssignee');
+            select.innerHTML = '<option value="">Non assigné</option>' + 
+                collaborators.map(c => `<option value="${c}">${c}</option>`).join('');
+        }
+
+        function addUserStory() {
+            const title = document.getElementById('storyTitle').value.trim();
+            const description = document.getElementById('storyDescription').value.trim();
+            const sprint = document.getElementById('storySprint').value;
+            const assignee = document.getElementById('storyAssignee').value;
+
+            if (title && description) {
+                const story = {
+                    id: storyIdCounter++,
+                    title,
+                    description,
+                    sprint: parseInt(sprint),
+                    assignee: assignee || 'Non assigné',
+                    status: 'backlog'
+                };
+
+                userStories.push(story);
+                document.getElementById('storyTitle').value = '';
+                document.getElementById('storyDescription').value = '';
+                renderSprintBacklog();
+            }
+        }
+
         function renderSprintBacklog() {
-            // À IMPLÉMENTER
-            let sprintBacklogConteneur = document.getElementById("sprintBacklog");
-
-
-
-        }
-
-        /**
-         * Fonction appelée lors du clic sur "Démarrer Sprint"
-         * TODO:
-         * - Filtrer toutes les stories du sprint demandé avec status 'backlog'
-         * - Pour chaque story trouvée:
-         *   - Changer son status à 'todo'
-         *   - Ajouter la story au tableau 'boardStories'
-         * - Retirer ces stories du tableau 'userStories'
-         * - Appeler renderSprintBacklog() et renderBoard() pour mettre à jour l'affichage
-         */
-        function startSprint(sprintNum) {
-            // À IMPLÉMENTER
+            const container = document.getElementById('sprintBacklog');
+            const sprints = [1, 2, 3];
             
+            container.innerHTML = sprints.map(sprintNum => {
+                const sprintStories = userStories.filter(s => s.sprint === sprintNum && s.status === 'backlog');
+                return `
+                    <div class="sprint-container">
+                        <div class="sprint-header">
+                            <h3>Sprint ${sprintNum}</h3>
+                            <button class="start-sprint-btn" onclick="startSprint(${sprintNum})">
+                                ▶ Démarrer Sprint
+                            </button>
+                        </div>
+                        <div class="sprint-stories">
+                            ${sprintStories.length > 0 ? 
+                                sprintStories.map(s => `
+                                    <div class="story-item">
+                                        <strong>${s.title}</strong>
+                                        <p>${s.description}</p>
+                                        <small>Assigné à: ${s.assignee}</small>
+                                    </div>
+                                `).join('') :
+                                '<div class="empty-state">Aucune story dans ce sprint</div>'
+                            }
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
 
-        /**
-         * Fonction pour afficher toutes les cartes sur le SCRUM Board
-         * TODO:
-         * - Pour chaque colonne ('todo', 'in-progress', 'testing', 'done'):
-         *   - Récupérer le conteneur de la colonne
-         *   - Filtrer les stories avec le status correspondant depuis 'boardStories'
-         *   - Si aucune story: afficher "Aucune carte"
-         *   - Sinon générer une carte pour chaque story avec:
-         *     - Titre, description, badge assigné
-         *     - Boutons "Suivant" (sauf pour done), "Précédent" (sauf pour todo), "Supprimer"
-         *   - Injecter le HTML dans le conteneur
-         */
+        function startSprint(sprintNum) {
+            const sprintStories = userStories.filter(s => s.sprint === sprintNum && s.status === 'backlog');
+            
+            sprintStories.forEach(story => {
+                story.status = 'todo';
+                boardStories.push(story);
+            });
+
+            userStories = userStories.filter(s => !(s.sprint === sprintNum && s.status === 'todo'));
+            
+            renderSprintBacklog();
+            renderBoard();
+        }
+
         function renderBoard() {
-            // À IMPLÉMENTER
-            const containers = document.querySelectorAll(".column");
-            containers.forEach(column =>{
-                const myStories = boardStories.filter(story => cloumn.classList.includes(story.status));
-                if(myStories.length === 0) { 
-                    const text = document.createElement("p").innerText = "Aucune carte";
-                    column.appendChild(text); }
-                else{
-                    const title = document.createElement("h3").innerText = myStories.title;
-                    const desc = document.createElement("h3").innerText = myStories.description;
-                    const badge = document.createElement("span").innerText = myStories.assignee;
-                    column.appendChild(title);
-                    column.appendChild(desc);
-                    column.appendChild(badge);
+            const columns = ['todo', 'in-progress', 'testing', 'done'];
+            
+            columns.forEach(column => {
+                const container = document.getElementById(column);
+                const stories = boardStories.filter(s => s.status === column);
+                
+                if (stories.length === 0) {
+                    container.innerHTML = '<div class="empty-state">Aucune carte</div>';
+                } else {
+                    container.innerHTML = stories.map(s => `
+                        <div class="card">
+                            <h4>${s.title}</h4>
+                            <p>${s.description}</p>
+                            <span class="assignee">${s.assignee}</span>
+                            <div class="card-actions">
+                                ${column !== 'done' ? `<button class="move-btn" onclick="moveCard(${s.id}, '${getNextStatus(column)}')">Suivant →</button>` : ''}
+                                ${column !== 'todo' ? `<button class="move-btn" onclick="moveCard(${s.id}, '${getPrevStatus(column)}')">← Précédent</button>` : ''}
+                                <button class="delete-btn" onclick="deleteCard(${s.id})">Supprimer</button>
+                            </div>
+                        </div>
+                    `).join('');
                 }
             });
         }
 
-        /**
-         * Fonction utilitaire pour obtenir le status suivant dans le workflow
-         * TODO:
-         * - Créer un objet avec les transitions: todo→in-progress, in-progress→testing, testing→done
-         * - Retourner le status suivant selon le status actuel
-         */
         function getNextStatus(current) {
-            // À IMPLÉMENTER
+            const flow = { 'todo': 'in-progress', 'in-progress': 'testing', 'testing': 'done' };
+            return flow[current];
         }
 
-        /**
-         * Fonction utilitaire pour obtenir le status précédent dans le workflow
-         * TODO:
-         * - Créer un objet avec les transitions: in-progress→todo, testing→in-progress, done→testing
-         * - Retourner le status précédent selon le status actuel
-         */
         function getPrevStatus(current) {
-            // À IMPLÉMENTER
+            const flow = { 'in-progress': 'todo', 'testing': 'in-progress', 'done': 'testing' };
+            return flow[current];
         }
 
-        /**
-         * Fonction pour déplacer une carte d'une colonne à une autre
-         * TODO
-         * - Trouver la story dans 'boardStories' avec l'id donné
-         * - Modifier son status avec newStatus
-         * - Appeler renderBoard() pour actualiser l'affichage
-         */
         function moveCard(id, newStatus) {
-            // À IMPLÉMENTERs
-            boardStories.find(story=> story.id === id)?.status = newStatus;
-            renderBoard();
-
+            const story = boardStories.find(s => s.id === id);
+            if (story) {
+                story.status = newStatus;
+                renderBoard();
+            }
         }
 
-        /**
-         * Fonction pour supprimer une carte du board
-         * TODO:
-         * - Filtrer 'boardStories' pour retirer la story avec l'id donné
-         * - Appeler renderBoard() pour actualiser l'affichage
-         */
         function deleteCard(id) {
-            // À IMPLÉMENTER
+            boardStories = boardStories.filter(s => s.id !== id);
+            renderBoard();
         }
 
         // Initialisation
