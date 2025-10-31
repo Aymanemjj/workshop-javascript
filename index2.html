@@ -426,7 +426,7 @@
         function updateAssigneeSelect() { 
             // À IMPLÉMENTER
             const storyAssignee = document.getElementById("storyAssignee");
-            let selectInnerHtml = "";
+            let selectInnerHtml = `<option value="" hidden selected>Non assigné</option>`;
             collaborators.forEach(collab => {
                 selectInnerHtml+= `<option value="${collab}">${collab}</option><br>`
             });
@@ -608,6 +608,20 @@
          */
         function getPrevStatus(current) {
             // À IMPLÉMENTER
+            let transition = {
+                in_progress: "todo",
+                testing: "in-progress",
+                done: "testing"
+            }
+
+            switch(current){
+                case "in-progress":
+                    return transition.in_progress;
+                case "testing":
+                    return transition.testing;
+                case "done":
+                    return transition.done;
+            }
         }
 
         /**
@@ -631,6 +645,8 @@
          */
         function deleteCard(id) {
             // À IMPLÉMENTER
+            boardStories.find(story=> story.id === id).status="backlog"
+            renderBoard();
         }
 
         // Initialisation
