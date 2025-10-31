@@ -392,7 +392,9 @@
             if(input.value && !collaborators.includes(input.value)) collaborators.push(input.value);
             input.value = "";
             updateCollaboratorsList();
-            updateAssigneeSelect()
+            updateAssigneeSelect();
+            console.log(collaborators);
+            
         }
 
         /**
@@ -476,6 +478,7 @@
         function renderSprintBacklog() {
             // À IMPLÉMENTER
             let sprintBacklogConteneur = document.getElementById("sprintBacklog");
+            
 
 
 
@@ -560,6 +563,20 @@
          */
         function getPrevStatus(current) {
             // À IMPLÉMENTER
+            let transition = {
+                in_progress: "todo",
+                testing: "in-progress",
+                done: "testing"
+            }
+
+            switch(current){
+                case "in-progress":
+                    return transition.in_progress;
+                case "testing":
+                    return transition.testing;
+                case "done":
+                    return transition.done;
+            }
         }
 
         /**
@@ -583,6 +600,8 @@
          */
         function deleteCard(id) {
             // À IMPLÉMENTER
+            boardStories.find(story=> story.id === id).status="backlog"
+            renderBoard();
         }
 
         // Initialisation
