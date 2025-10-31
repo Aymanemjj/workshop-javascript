@@ -435,6 +435,25 @@
          */
         function addUserStory() {
             // À IMPLÉMENTER
+            const storyTitle = document.getElementById("storyTitle");
+            const storyDescription = document.getElementById("storyDescription");
+            const storySprint = document.getElementById("storySprint");
+            const storyAssignee = document.getElementById("storyAssignee");
+
+            if(storyTitle && storyDescription){
+                const story = {
+                    id:storyIdCounter++,
+                    title:storyTitle,
+                    description:storyDescription,
+                    sprint:parseInt(startSprint),
+                    assignee:storyAssignee,
+                    status:"backlog"
+                }
+                userStories.push(story);
+            }
+            storyTitle.value = "";
+            storyDescription.value = "";
+            renderSprintBacklog();
         }
 
         /**
@@ -480,6 +499,21 @@
          */
         function renderBoard() {
             // À IMPLÉMENTER
+            const containers = document.querySelectorAll(".column");
+            containers.forEach(column =>{
+                const myStories = boardStories.filter(story => cloumn.classList.includes(story.status));
+                if(myStories.length === 0) { 
+                    const text = document.createElement("p").innerText = "Aucune carte";
+                    column.appendChild(text); }
+                else{
+                    const title = document.createElement("h3").innerText = myStories.title;
+                    const desc = document.createElement("h3").innerText = myStories.description;
+                    const badge = document.createElement("span").innerText = myStories.assignee;
+                    column.appendChild(title);
+                    column.appendChild(desc);
+                    column.appendChild(badge);
+                }
+            });
         }
 
         /**
@@ -511,8 +545,9 @@
          */
         function moveCard(id, newStatus) {
             // À IMPLÉMENTERs
-            const boardStories = document.getElementById(id);
-            
+            boardStories.find(story=> story.id === id)?.status = newStatus;
+            renderBoard();
+
         }
 
         /**
