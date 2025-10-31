@@ -424,10 +424,11 @@
         function updateAssigneeSelect() { 
             // À IMPLÉMENTER
             const storyAssignee = document.getElementById("storyAssignee");
-            const selectInnerHtml = "";
+            let selectInnerHtml = "";
             collaborators.forEach(collab => {
                 selectInnerHtml+= `<option value="${collab}">${collab}</option><br>`
             });
+            storyAssignee.innerHTML = selectInnerHtml;
         }
 
         /**
@@ -452,7 +453,7 @@
                     id:storyIdCounter++,
                     title:storyTitle,
                     description:storyDescription,
-                    sprint:parseInt(startSprint),
+                    sprint:parseInt(storySprint),
                     assignee:storyAssignee,
                     status:"backlog"
                 }
@@ -516,7 +517,8 @@
             containers.forEach(column =>{
                 const myStories = boardStories.filter(story => cloumn.classList.includes(story.status));
                 if(myStories.length === 0) { 
-                    const text = document.createElement("p").innerText = "Aucune carte";
+                    const text = document.createElement("p");
+                    text.innerText = "Aucune carte";
                     column.appendChild(text); }
                 else{
                     const title = document.createElement("h3").innerText = myStories.title;
@@ -537,6 +539,20 @@
          */
         function getNextStatus(current) {
             // À IMPLÉMENTER
+            let transition = {
+                todo: "in-progress",
+                in_progress: "testing",
+                testing: "done"
+            }
+
+            switch(current){
+                case "todo":
+                    return transition.todo;
+                case "in-progress":
+                    return transition.in_progress;
+                case "testing":
+                    return transition.testing;
+            }
         }
 
         /**
@@ -558,9 +574,8 @@
          */
         function moveCard(id, newStatus) {
             // À IMPLÉMENTERs
-/*             boardStories.find(story=> story.id === id)?.status = newStatus;
+            boardStories.find(story=> story.id === id).status = newStatus;
             renderBoard();
- */
         }
 
         /**
