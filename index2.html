@@ -388,6 +388,11 @@
          */
         function addCollaborator() {
             // À IMPLÉMENTER
+            const input = document.getElementById("collaboratorName");
+            if(input.value && !collaborators.includes(input.value)) collaborators.push(input.value);
+            input.value = "";
+            updateCollaboratorsList();
+            updateAssigneeSelect()
         }
 
         /**
@@ -409,8 +414,13 @@
          * - Générer les options: une option "Non assigné" + une option par collaborateur
          * - Mettre à jour le select avec innerHTML
          */
-        function updateAssigneeSelect() {
+        function updateAssigneeSelect() { 
             // À IMPLÉMENTER
+            const storyAssignee = document.getElementById("storyAssignee");
+            const selectInnerHtml = "";
+            collaborators.forEach(collab => {
+                selectInnerHtml+= `<option value="${collab}">${collab}</option><br>`
+            });
         }
 
         /**
@@ -500,7 +510,9 @@
          * - Appeler renderBoard() pour actualiser l'affichage
          */
         function moveCard(id, newStatus) {
-            // À IMPLÉMENTER
+            // À IMPLÉMENTERs
+            const boardStories = document.getElementById(id);
+            
         }
 
         /**
