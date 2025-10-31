@@ -306,7 +306,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🚀 SCRUM Board</h1>
+            <h1 >🚀 SCRUM Board</h1>
             <p>Gérez vos projets avec agilité</p>
         </div>
 
@@ -388,6 +388,11 @@
          */
         function addCollaborator() {
             // À IMPLÉMENTER
+            const input = document.getElementById("collaboratorName");
+            if(input.value && !collaborators.includes(input.value)) collaborators.push(input.value);
+            input.value = "";
+            updateCollaboratorsList();
+            updateAssigneeSelect()
         }
 
         /**
@@ -400,6 +405,11 @@
          */
         function updateCollaboratorsList() {
             // À IMPLÉMENTER
+            let i = 0;
+            let collaboratorsList = document.getElementById("collaboratorsList");
+            let span = `<span style="background: #667eea; color: white; padding: 8px 15px; border-radius: 20px;">${collaborators[i]}</span>`;
+            collaboratorsList.innerHTML += span;  
+            i++;
         }
 
         /**
@@ -411,6 +421,11 @@
          */
         function updateAssigneeSelect() {
             // À IMPLÉMENTER
+            const storyAssignee = document.getElementById("storyAssignee");
+            let selectInnerHtml = "";
+            collaborators.forEach(collab => {
+                selectInnerHtml+= `<option value="${collab}">${collab}</option><br>`
+            });
         }
 
         /**
@@ -425,6 +440,7 @@
          */
         function addUserStory() {
             // À IMPLÉMENTER
+
         }
 
         /**
@@ -440,6 +456,10 @@
          */
         function renderSprintBacklog() {
             // À IMPLÉMENTER
+            let sprintBacklogConteneur = document.getElementById("sprintBacklog");
+
+
+
         }
 
         /**
@@ -454,6 +474,7 @@
          */
         function startSprint(sprintNum) {
             // À IMPLÉMENTER
+            
         }
 
         /**
