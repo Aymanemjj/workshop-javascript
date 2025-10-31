@@ -524,6 +524,15 @@
                     const title = document.createElement("h3").innerText = myStories.title;
                     const desc = document.createElement("h3").innerText = myStories.description;
                     const badge = document.createElement("span").innerText = myStories.assignee;
+                    const suivant = document.createElement("button")
+                    suivant.innerText = "suivant";
+                    suivant.addEventListener("click",moveCard(myStories.id,getNextStatus(myStories.status)));
+                    const previous = document.createElement("button")
+                    suivant.innerText = "previous";
+                    previous.addEventListener("click",moveCard(myStories.id,getNextStatus(myStories.status)));
+                    const suprimer = document.createElement("button")
+                    suprimer.innerText = "supprimer";
+                    suprimer.addEventListener("click",moveCard(myStories.id,getNextStatus(myStories.status)));
                     column.appendChild(title);
                     column.appendChild(desc);
                     column.appendChild(badge);
