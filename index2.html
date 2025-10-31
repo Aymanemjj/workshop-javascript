@@ -480,6 +480,20 @@
          */
         function getNextStatus(current) {
             // À IMPLÉMENTER
+            let transition = {
+                todo: "in-progress",
+                in_progress: "testing",
+                testing: "done"
+            }
+
+            switch(current){
+                case "todo":
+                    return transition.todo;
+                case "in-progress":
+                    return transition.in_progress;
+                case "testing":
+                    return transition.testing;
+            }
         }
 
         /**
