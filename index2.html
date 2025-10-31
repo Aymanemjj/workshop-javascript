@@ -448,7 +448,7 @@
             const storySprint = document.getElementById("storySprint");
             const storyAssignee = document.getElementById("storyAssignee");
 
-            if(storyTitle && storyDescription){
+            if(storyTitle.value!="" && storyDescription.value!=""){
                 const story = {
                     id:storyIdCounter++,
                     title:storyTitle.value,
