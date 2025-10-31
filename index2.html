@@ -366,6 +366,7 @@
                     <h3>Terminé</h3>
                     <div id="done" class="column-content"></div>
                 </div>
+                
             </div>
         </div>
     </div>
@@ -407,11 +408,12 @@
          */
         function updateCollaboratorsList() {
             // À IMPLÉMENTER
-            let i = 0;
+            
             let collaboratorsList = document.getElementById("collaboratorsList");
-            let span = `<span style="background: #667eea; color: white; padding: 8px 15px; border-radius: 20px;">${collaborators[i]}</span>`;
-            collaboratorsList.innerHTML += span;  
-            i++;
+            collaboratorsList.innerHTML=""
+            collaborators.forEach(collab => collaboratorsList.innerHTML += `<span style="background: #667eea; color: white; padding: 8px 15px; border-radius: 20px;">${collab}</span>`)
+             
+            
         }
 
         /**
@@ -448,17 +450,19 @@
             const storySprint = document.getElementById("storySprint");
             const storyAssignee = document.getElementById("storyAssignee");
 
-            if(storyTitle && storyDescription){
+            if(storyTitle.value!="" && storyDescription.value!=""){
                 const story = {
                     id:storyIdCounter++,
-                    title:storyTitle,
-                    description:storyDescription,
-                    sprint:parseInt(storySprint),
-                    assignee:storyAssignee,
+                    title:storyTitle.value,
+                    description:storyDescription.value,
+                    sprint:parseInt(storySprint.value),
+                    assignee:storyAssignee.value,
                     status:"backlog"
                 }
                 userStories.push(story);
             }
+            console.log(userStories);
+            
             storyTitle.value = "";
             storyDescription.value = "";
             renderSprintBacklog();
@@ -477,8 +481,49 @@
          */
         function renderSprintBacklog() {
             // À IMPLÉMENTER
-            let sprintBacklogConteneur = document.getElementById("sprintBacklog");
-            
+            console.log(userStories);
+            let container = document.getElementById("sprintBacklog");
+
+            userStories.filter(story=> story.status.includes("backlog")).forEach(story=>{
+                console.log(story);
+                if(container.childElementCount !== 3){
+                    container.innerHTML += `<div id="sprint1" class="sprint-container"><header class="sprint-header"><h3>Sprint ${story.sprint}</h3> <button class="start-sprint-btn" type="button">start</button></header></div>`
+                    container.innerHTML += `<div id="sprint2" class="sprint-container"><header class="sprint-header"><h3>Sprint ${story.sprint+1}</h3> <button class="start-sprint-btn" type="button">start</button></header></div>`
+                    container.innerHTML += `<div id="sprint3" class="sprint-container"><header class="sprint-header"><h3>Sprint ${story.sprint+2}</h3> <button class="start-sprint-btn" type="button">start</button></header></div>`
+                }
+                switch(story.sprint){
+                    case 1: 
+
+                    if(container.firstChild.innerHTML !=0){
+                        container.firstChild.innerHTML += "<div class='sprint-stories'></div>"
+                    }
+                    container.firstChild.lastChild.innerHTML += `<div class='story-item'><strong>${story.title}</strong><p>${story.description}</p><small>${story.assignee}</small></div>`
+                    userStories = [];  
+
+                        break;
+
+                    case 2:
+
+                    if(container.firstChild.nextSibling.innerHTML !=0){
+                        container.firstChild.nextSibling.innerHTML += "<div class='sprint-stories'></div>"
+                    }
+                    container.firstChild.nextSibling.lastChild.innerHTML += `<div class='story-item'><strong>${story.title}</strong><p>${story.description}</p><small>${story.assignee}</small></div>`
+                    userStories = [];  
+
+                        break;
+
+                    case 3:     
+
+                    if(container.lastChild.innerHTML !=0){
+                        container.lastChild.innerHTML += "<div class='sprint-stories'></div>"
+                    }
+                    container.lastChild.lastChild.innerHTML += `<div class='story-item'><strong>${story.title}</strong><p>${story.description}</p><small>${story.assignee}</small></div>`
+                    userStories = [];  
+
+                        break;
+                }
+            });
+
 
 
 
